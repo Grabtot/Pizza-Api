@@ -1,4 +1,6 @@
 using PizzaApi.Api;
+using PizzaApi.Application;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,7 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 
 services.AddPresentation(configuration);
+services.AddApplication();
 
 services.AddControllers();
 
@@ -29,3 +32,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+Log.CloseAndFlush();

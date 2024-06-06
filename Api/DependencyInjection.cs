@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using Serilog.Events;
 
 namespace PizzaApi.Api
 {
@@ -18,6 +19,9 @@ namespace PizzaApi.Api
                 out var value) || value;
 
             var loggerConfiguration = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
                 .MinimumLevel.Information()
                 .WriteTo.Console();
 
