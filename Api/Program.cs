@@ -1,11 +1,17 @@
+using PizzaApi.Api;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var services = builder.Services;
+var configuration = builder.Configuration;
 
-builder.Services.AddControllers();
+services.AddPresentation(configuration);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddControllers();
+
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 var app = builder.Build();
 
