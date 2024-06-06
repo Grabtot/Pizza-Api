@@ -1,5 +1,8 @@
-﻿using Serilog;
+﻿using Mapster;
+using MapsterMapper;
+using Serilog;
 using Serilog.Events;
+using System.Reflection;
 
 namespace PizzaApi.Api
 {
@@ -8,6 +11,18 @@ namespace PizzaApi.Api
         public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddLogging(configuration);
+            services.AddMapping();
+
+            return services;
+        }
+
+        public static IServiceCollection AddMapping(this IServiceCollection services)
+        {
+            TypeAdapterConfig config = TypeAdapterConfig.GlobalSettings;
+            config.Scan(Assembly.GetExecutingAssembly());
+
+            services.AddSingleton(config);
+            services.AddScoped<IMapper, ServiceMapper>();
 
             return services;
         }
