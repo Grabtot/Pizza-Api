@@ -1,4 +1,5 @@
 using PizzaApi.Api;
+using PizzaApi.Api.Attributes;
 using PizzaApi.Application;
 using Serilog;
 
@@ -11,7 +12,10 @@ var configuration = builder.Configuration;
 services.AddPresentation(configuration);
 services.AddApplication();
 
-services.AddControllers();
+services.AddControllers(options =>
+{
+    options.Filters.Add<ExceptionFilterAttribute>();
+});
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
