@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>PizzaApi.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <UserSecretsId>abfdf93f-a6bb-47f1-890c-27e00617fc4c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
