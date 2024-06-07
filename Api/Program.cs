@@ -1,11 +1,24 @@
+using PizzaApi.Api;
+using PizzaApi.Api.Attributes;
+using PizzaApi.Application;
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var services = builder.Services;
+var configuration = builder.Configuration;
 
-builder.Services.AddControllers();
+services.AddPresentation(configuration);
+services.AddApplication();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddControllers(options =>
+{
+    options.Filters.Add<ExceptionFilterAttribute>();
+});
+
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -23,3 +36,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+Log.CloseAndFlush();
