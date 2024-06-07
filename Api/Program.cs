@@ -1,6 +1,7 @@
 using PizzaApi.Api;
 using PizzaApi.Api.Attributes;
 using PizzaApi.Application;
+using PizzaApi.Infrastructure;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ var configuration = builder.Configuration;
 
 services.AddPresentation(configuration);
 services.AddApplication();
+services.AddInfrastructure(configuration);
 
 services.AddControllers(options =>
 {
