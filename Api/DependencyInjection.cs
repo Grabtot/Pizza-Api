@@ -37,6 +37,8 @@ namespace PizzaApi.Api
                 .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+                .MinimumLevel.Override("PizzaApi.Infrastructure", LogEventLevel.Debug)
                 .MinimumLevel.Information()
                 .WriteTo.Console();
 
