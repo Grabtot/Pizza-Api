@@ -33,8 +33,8 @@ namespace PizzaApi.Api.Controllers
         private static void LogError(Error error)
         {
             StackFrame callerFrame = new StackTrace().GetFrame(2)!;
-            var callerMethod = callerFrame?.GetMethod();
-            var className = callerMethod?.DeclaringType?.Name;
+            System.Reflection.MethodBase? callerMethod = callerFrame?.GetMethod();
+            string? className = callerMethod?.DeclaringType?.Name;
 
             Log.Information("Error occurred in method {CallerMethod}({ClassName}): {ErrorType} - {ErrorDescription}",
                 callerMethod?.Name,

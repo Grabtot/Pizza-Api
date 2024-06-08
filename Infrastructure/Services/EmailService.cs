@@ -1,11 +1,6 @@
 ﻿using FluentEmail.Core;
 using PizzaApi.Infrastructure.Common.Interfaces;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PizzaApi.Infrastructure.Services
 {
@@ -17,7 +12,7 @@ namespace PizzaApi.Infrastructure.Services
         {
             Log.Information("Sending email");
 
-            var email = _emailFactory.Create();
+            IFluentEmail email = _emailFactory.Create();
 
             await email.To(toAddress)
                  .Subject(subject)

@@ -31,9 +31,9 @@ namespace PizzaApi.Api
         {
             string? logFilePath = configuration.GetSection("Logs:Path").Value;
             bool writeInFile = !bool.TryParse(configuration.GetSection("Logs:WriteInFile").Value,
-                out var value) || value;
+                out bool value) || value;
 
-            var loggerConfiguration = new LoggerConfiguration()
+            LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
@@ -71,13 +71,13 @@ namespace PizzaApi.Api
                 return;
             }
 
-            var formattedLogFilePath = FormatLogFilePath(logFilePath);
+            string formattedLogFilePath = FormatLogFilePath(logFilePath);
             Log.Information("Logs are being written to the file: {LogFilePath}", formattedLogFilePath);
         }
 
         private static string FormatLogFilePath(string logFilePath)
         {
-            var slashIndex = logFilePath.LastIndexOf('.');
+            int slashIndex = logFilePath.LastIndexOf('.');
             if (slashIndex == -1)
             {
                 return $"{logFilePath}_{DateTime.Now:yyyyMMdd}";
