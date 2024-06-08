@@ -1,6 +1,7 @@
 using PizzaApi.Api;
 using PizzaApi.Api.Attributes;
 using PizzaApi.Application;
+using PizzaApi.Domain.Users;
 using PizzaApi.Infrastructure;
 using Serilog;
 
@@ -23,6 +24,8 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.MapIdentityApi<User>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
