@@ -1,12 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FluentEmail.Core.Interfaces;
+using FluentEmail.Smtp;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PizzaApi.Application.Common.Interfaces.Repositories;
 using PizzaApi.Domain.Users;
+using PizzaApi.Infrastructure.Common.Interfaces;
+using PizzaApi.Infrastructure.Common.Interfaces.Options;
 using PizzaApi.Infrastructure.Persistence;
 using PizzaApi.Infrastructure.Persistence.Repositories;
+using PizzaApi.Infrastructure.Services;
 using Serilog;
+using System.Net;
+using System.Net.Mail;
 
 namespace PizzaApi.Infrastructure
 {
@@ -31,6 +39,44 @@ namespace PizzaApi.Infrastructure
                 => options.UseNpgsql(connectionString));
 
             services.AddAuthentication(configuration);
+            services.AddFluentEmail(configuration);
+
+            return services;
+        }
+
+        private static IServiceCollection AddFluentEmail(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var options = configuration.GetSection(EmailOptions.SectionName).Get<EmailOptions>();
+
+            if (options == null || options.UseEmailSender == false)
+            {
+                Log.Information("Email sender disabled");
+                return services;
+            }
+
+            services.AddFluentEmail(options.DefaultFromEmail);
+
+            NetworkCredential? credentials = null;
+
+            if (!string.IsNullOrEmpty(options.Username) && !string.IsNullOrEmpty(options.Password))
+            {
+                credentials = new NetworkCredential(options.Username, options.Password);
+            }
+
+            var sender = new SmtpSender(new SmtpClient()
+            {
+                Host = options.Host,
+                Port = options.Port,
+                Credentials = credentials
+            });
+
+            services.AddSingleton<ISender>(sender);
+
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IEmailSender, EmailSender>();
+
+            Log.Debug("Email options = {@emailSettings}", options);
 
             return services;
         }
