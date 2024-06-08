@@ -12,6 +12,12 @@ namespace PizzaApi.Infrastructure
 {
     public static class DependencyInjection
     {
+        /// <summary>
+        /// Adds infrastructure services to the specified <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
+        /// <param name="configuration">The <see cref="IConfiguration"/> instance used to retrieve configuration settings.</param>
+        /// <returns>The <see cref="IServiceCollection"/> with added infrastructure services.</returns>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             string? connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -29,6 +35,12 @@ namespace PizzaApi.Infrastructure
             return services;
         }
 
+        /// <summary>
+        /// Configures authentication and identity services for the specified <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
+        /// <param name="configuration">The <see cref="IConfiguration"/> instance used to retrieve configuration settings.</param>
+        /// <returns>The <see cref="IServiceCollection"/> with added authentication services.</returns>
         public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddIdentityApiEndpoints<User>(options =>
@@ -57,6 +69,12 @@ namespace PizzaApi.Infrastructure
             return services;
         }
 
+        /// <summary>
+        /// Attempts to retrieve identity option sections from the configuration.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of the identity options.</typeparam>
+        /// <param name="configuration">The <see cref="IConfiguration"/> instance used to retrieve configuration settings.</param>
+        /// <returns>The retrieved identity options, or <c>null</c> if not specified in the configuration.</returns>
         private static TOptions? TryGetIdentityOptionsSections<TOptions>(IConfiguration configuration)
         {
             string sectionName = typeof(TOptions).Name;
@@ -72,6 +90,11 @@ namespace PizzaApi.Infrastructure
             return options;
         }
 
+        /// <summary>
+        /// Adds repository services to the specified <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
+        /// <returns>The <see cref="IServiceCollection"/> with added repository services.</returns>
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUsersRepository, UsersRepository>();
