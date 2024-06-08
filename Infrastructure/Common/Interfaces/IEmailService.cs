@@ -1,6 +1,4 @@
-﻿using PizzaApi.Infrastructure.Services;
-
-namespace PizzaApi.Infrastructure.Common.Interfaces
+﻿namespace PizzaApi.Infrastructure.Common.Interfaces
 {
     public interface IEmailService
     {

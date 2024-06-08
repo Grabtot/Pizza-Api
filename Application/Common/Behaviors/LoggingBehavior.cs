@@ -13,11 +13,11 @@ namespace PizzaApi.Application.Common.Behaviors
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
             CancellationToken cancellationToken)
         {
-            var splitedRequestName = SplitRequestName(typeof(TRequest).Name);
+            string splitedRequestName = SplitRequestName(typeof(TRequest).Name);
 
             Log.Information($"Starting {splitedRequestName}");
 
-            var response = await next();
+            TResponse response = await next();
 
             string resultState = response.IsError ? "failed" : "completed successful";
             Log.Information($"{splitedRequestName} {resultState}");

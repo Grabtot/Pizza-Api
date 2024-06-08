@@ -21,14 +21,14 @@ namespace PizzaApi.Application.Common.Behaviors
                 return await next();
             }
 
-            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+            FluentValidation.Results.ValidationResult validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
             if (validationResult.IsValid)
             {
                 return await next();
             }
 
-            var errors = validationResult.Errors
+            List<Error> errors = validationResult.Errors
                 .ConvertAll(error => Error.Validation(
                     code: error.PropertyName,
                     description: error.ErrorMessage));

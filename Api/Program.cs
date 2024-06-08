@@ -5,11 +5,11 @@ using PizzaApi.Domain.Users;
 using PizzaApi.Infrastructure;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var services = builder.Services;
-var configuration = builder.Configuration;
+IServiceCollection services = builder.Services;
+ConfigurationManager configuration = builder.Configuration;
 
 services.AddPresentation(configuration);
 services.AddApplication();
@@ -23,7 +23,7 @@ services.AddControllers(options =>
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.MapIdentityApi<User>();
 

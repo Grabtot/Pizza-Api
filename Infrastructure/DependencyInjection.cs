@@ -47,7 +47,7 @@ namespace PizzaApi.Infrastructure
         private static IServiceCollection AddFluentEmail(this IServiceCollection services,
             IConfiguration configuration)
         {
-            var options = configuration.GetSection(EmailOptions.SectionName).Get<EmailOptions>();
+            EmailOptions? options = configuration.GetSection(EmailOptions.SectionName).Get<EmailOptions>();
 
             if (options == null || options.UseEmailSender == false)
             {
@@ -64,7 +64,7 @@ namespace PizzaApi.Infrastructure
                 credentials = new NetworkCredential(options.Username, options.Password);
             }
 
-            var sender = new SmtpSender(new SmtpClient()
+            SmtpSender sender = new(new SmtpClient()
             {
                 Host = options.Host,
                 Port = options.Port,
