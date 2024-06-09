@@ -75,6 +75,7 @@ namespace PizzaApi.Infrastructure
 
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailSender, EmailSender>();
+            //services.AddTransient<IEmailSender<User>, EmailSender>();
 
             Log.Debug("Email options = {@emailSettings}", options);
 
