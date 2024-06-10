@@ -38,6 +38,8 @@ namespace PizzaApi.Infrastructure
             services.AddDbContext<PizzaDbContext>(options
                 => options.UseNpgsql(connectionString));
 
+            services.AddRepositories();
+
             services.AddAuthentication(configuration);
             services.AddFluentEmail(configuration);
 

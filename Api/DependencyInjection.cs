@@ -1,5 +1,7 @@
 ﻿using Mapster;
 using MapsterMapper;
+using PizzaApi.Api.Common.Services;
+using PizzaApi.Application.Common.Interfaces;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
@@ -12,6 +14,8 @@ namespace PizzaApi.Api
         {
             services.AddLogging(configuration);
             services.AddMapping();
+
+            services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
             return services;
         }
