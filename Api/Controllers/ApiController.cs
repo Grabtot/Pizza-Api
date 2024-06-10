@@ -1,4 +1,6 @@
 ﻿using ErrorOr;
+using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Serilog;
@@ -8,8 +10,11 @@ namespace PizzaApi.Api.Controllers
 {
     [ApiController]
 
-    public abstract class ApiController : ControllerBase
+    public abstract class ApiController(IMapper mapper, IMediator mediator) : ControllerBase
     {
+        protected readonly IMediator Mediator = mediator;
+        protected readonly IMapper Mapper = mapper;
+
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Problem(Error error)
         {
