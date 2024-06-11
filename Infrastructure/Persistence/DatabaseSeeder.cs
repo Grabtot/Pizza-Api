@@ -2,12 +2,6 @@
 using PizzaApi.Application.Common.Constants;
 using PizzaApi.Domain.Users;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PizzaApi.Infrastructure.Persistence
 {
@@ -42,7 +36,7 @@ namespace PizzaApi.Infrastructure.Persistence
             };
 
             _userManager.CreateAsync(user, "pass").Wait();
-            _userManager.AddToRoleAsync(user, Constants.Role.Developer).Wait();
+            _userManager.AddToRoleAsync(user, Constants.Account.Developer).Wait();
 
             Log.Information($"{email} created");
         }

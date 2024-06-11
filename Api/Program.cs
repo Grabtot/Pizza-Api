@@ -27,8 +27,6 @@ WebApplication app = builder.Build();
 
 app.MigrateDatabase(configuration);
 
-app.MapIdentityApi<User>();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -38,6 +36,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

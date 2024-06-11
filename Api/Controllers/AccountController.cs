@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Users;
-using PizzaApi.Application.Common.Constants;
 using PizzaApi.Application.Common.Interfaces;
 using PizzaApi.Application.Users.Commands;
 using PizzaApi.Application.Users.Queries;

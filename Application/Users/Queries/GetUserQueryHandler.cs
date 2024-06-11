@@ -2,11 +2,6 @@
 using MediatR;
 using PizzaApi.Application.Common.Interfaces.Repositories;
 using PizzaApi.Domain.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PizzaApi.Application.Users.Queries
 {
@@ -17,7 +12,7 @@ namespace PizzaApi.Application.Users.Queries
 
         public async Task<ErrorOr<User>> Handle(GetUserQuery query, CancellationToken cancellationToken)
         {
-            var user = await _usersRepository.FindAsync(query.Id);
+            User? user = await _usersRepository.FindAsync(query.Id);
 
             if (user is null)
             {
