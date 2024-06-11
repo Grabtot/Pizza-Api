@@ -25,6 +25,8 @@ services.AddSwaggerGen();
 
 WebApplication app = builder.Build();
 
+app.MigrateDatabase(configuration);
+
 app.MapIdentityApi<User>();
 
 // Configure the HTTP request pipeline.
