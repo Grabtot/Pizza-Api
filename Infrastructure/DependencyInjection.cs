@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PizzaApi.Application.Common.Interfaces.Repositories;
 using PizzaApi.Domain.Users;
 using PizzaApi.Infrastructure.Common.Interfaces;
-using PizzaApi.Infrastructure.Common.Interfaces.Options;
+using PizzaApi.Infrastructure.Common.Options;
 using PizzaApi.Infrastructure.Persistence;
 using PizzaApi.Infrastructure.Persistence.Repositories;
 using PizzaApi.Infrastructure.Services;

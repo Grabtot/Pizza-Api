@@ -1,4 +1,4 @@
-﻿namespace PizzaApi.Infrastructure.Common.Interfaces.Options
+﻿namespace PizzaApi.Infrastructure.Common.Options
 {
     public class EmailOptions
     {
