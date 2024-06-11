@@ -1,10 +1,13 @@
 ﻿using FluentEmail.Core.Interfaces;
 using FluentEmail.Smtp;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using PizzaApi.Application.Common.Constants;
 using PizzaApi.Application.Common.Interfaces.Repositories;
 using PizzaApi.Domain.Users;
 using PizzaApi.Infrastructure.Common.Interfaces;
@@ -38,10 +41,13 @@ namespace PizzaApi.Infrastructure
             services.AddDbContext<PizzaDbContext>(options
                 => options.UseNpgsql(connectionString));
 
+
             services.AddRepositories();
 
-            services.AddAuthentication(configuration);
             services.AddFluentEmail(configuration);
+            services.AddAuthentication(configuration);
+
+            services.AddAuthorization();
 
             return services;
         }
@@ -77,7 +83,7 @@ namespace PizzaApi.Infrastructure
 
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailSender, EmailSender>();
-            //services.AddTransient<IEmailSender<User>, EmailSender>();
+            // services.AddTransient<IEmailSender<User>, EmailSender>();
 
             Log.Debug("Email options = {@emailSettings}", options);
 
@@ -92,7 +98,7 @@ namespace PizzaApi.Infrastructure
         /// <returns>The <see cref="IServiceCollection"/> with added authentication services.</returns>
         public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddIdentityApiEndpoints<User>(options =>
+            services.AddIdentity<User, IdentityRole<Guid>>(options =>
             {
                 PasswordOptions? passwordOptions = TryGetIdentityOptionsSections<PasswordOptions>(configuration);
                 SignInOptions? signInOptions = TryGetIdentityOptionsSections<SignInOptions>(configuration);
@@ -114,6 +120,8 @@ namespace PizzaApi.Infrastructure
             })
             .AddEntityFrameworkStores<PizzaDbContext>()
             .AddDefaultTokenProviders();
+
+            services.AddIdentityApiEndpoints<User>();
 
             return services;
         }
@@ -139,6 +147,17 @@ namespace PizzaApi.Infrastructure
             return options;
         }
 
+        private static IServiceCollection AddAuthorization(this IServiceCollection services)
+        {
+            services.AddAuthorizationBuilder()
+                .AddPolicy(Constants.Policies.MangerOrDeveloper, policyBuilder =>
+                {
+                    policyBuilder.RequireRole(Constants.Role.Manger, Constants.Role.Developer);
+                });
+
+            return services;
+        }
+
         /// <summary>
         /// Adds repository services to the specified <see cref="IServiceCollection"/>.
         /// </summary>
@@ -149,6 +168,38 @@ namespace PizzaApi.Infrastructure
             services.AddScoped<IUsersRepository, UsersRepository>();
 
             return services;
+        }
+
+        public static WebApplication MigrateDatabase(this WebApplication host, IConfiguration configuration)
+        {
+            using (IServiceScope scope = host.Services.CreateScope())
+            {
+                IServiceProvider services = scope.ServiceProvider;
+                try
+                {
+                    PizzaDbContext context = services.GetRequiredService<PizzaDbContext>();
+                    context.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex, "An error occurred while applying migrations.");
+                    throw;
+                }
+            }
+
+            if (host.Environment.IsDevelopment() && configuration.GetValue<bool>("SeedDatabase"))
+            {
+                using (IServiceScope scope = host.Services.CreateScope())
+                {
+                    UserManager<User> userManager = scope.ServiceProvider
+                        .GetRequiredService<UserManager<User>>();
+
+                    DatabaseSeeder seeder = new(userManager);
+                    seeder.Seed();
+                }
+            }
+
+            return host;
         }
     }
 }
