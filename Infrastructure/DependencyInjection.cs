@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PizzaApi.Application.Common.Constants;
 using PizzaApi.Application.Common.Interfaces.Repositories;
 using PizzaApi.Domain.Users;
+using PizzaApi.Infrastructure.Authentication;
 using PizzaApi.Infrastructure.Common.Interfaces;
 using PizzaApi.Infrastructure.Common.Options;
 using PizzaApi.Infrastructure.Persistence;
@@ -45,9 +45,7 @@ namespace PizzaApi.Infrastructure
             services.AddRepositories();
 
             services.AddFluentEmail(configuration);
-            services.AddAuthentication(configuration);
-
-            services.AddAuthorization();
+            services.AddAuthenticationAndAuthorization(configuration);
 
             return services;
         }
@@ -86,74 +84,6 @@ namespace PizzaApi.Infrastructure
             // services.AddTransient<IEmailSender<User>, EmailSender>();
 
             Log.Debug("Email options = {@emailSettings}", options);
-
-            return services;
-        }
-
-        /// <summary>
-        /// Configures authentication and identity services for the specified <see cref="IServiceCollection"/>.
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
-        /// <param name="configuration">The <see cref="IConfiguration"/> instance used to retrieve configuration settings.</param>
-        /// <returns>The <see cref="IServiceCollection"/> with added authentication services.</returns>
-        public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddIdentity<User, IdentityRole<Guid>>(options =>
-            {
-                PasswordOptions? passwordOptions = TryGetIdentityOptionsSections<PasswordOptions>(configuration);
-                SignInOptions? signInOptions = TryGetIdentityOptionsSections<SignInOptions>(configuration);
-                LockoutOptions? lockoutOptions = TryGetIdentityOptionsSections<LockoutOptions>(configuration);
-                UserOptions? userOptions = TryGetIdentityOptionsSections<UserOptions>(configuration);
-                ClaimsIdentityOptions? claimsIdentityOptions = TryGetIdentityOptionsSections<ClaimsIdentityOptions>(configuration);
-                TokenOptions? tokenOptions = TryGetIdentityOptionsSections<TokenOptions>(configuration);
-                StoreOptions? storeOptions = TryGetIdentityOptionsSections<StoreOptions>(configuration);
-
-                options.Password = passwordOptions ?? options.Password;
-                options.SignIn = signInOptions ?? options.SignIn;
-                options.Lockout = lockoutOptions ?? options.Lockout;
-                options.User = userOptions ?? options.User;
-                options.ClaimsIdentity = claimsIdentityOptions ?? options.ClaimsIdentity;
-                options.Tokens = tokenOptions ?? options.Tokens;
-                options.Stores = storeOptions ?? options.Stores;
-
-                Log.Debug("Identity options = {@Options}", options);
-            })
-            .AddEntityFrameworkStores<PizzaDbContext>()
-            .AddDefaultTokenProviders();
-
-            services.AddIdentityApiEndpoints<User>();
-
-            return services;
-        }
-
-        /// <summary>
-        /// Attempts to retrieve identity option sections from the configuration.
-        /// </summary>
-        /// <typeparam name="TOptions">The type of the identity options.</typeparam>
-        /// <param name="configuration">The <see cref="IConfiguration"/> instance used to retrieve configuration settings.</param>
-        /// <returns>The retrieved identity options, or <c>null</c> if not specified in the configuration.</returns>
-        private static TOptions? TryGetIdentityOptionsSections<TOptions>(IConfiguration configuration)
-        {
-            string sectionName = typeof(TOptions).Name;
-
-            TOptions? options = configuration.GetSection(
-                $"IdentityOptions:{sectionName}").Get<TOptions>();
-
-            if (options == null)
-            {
-                Log.Warning($"{sectionName} identity options is not specified");
-            }
-
-            return options;
-        }
-
-        private static IServiceCollection AddAuthorization(this IServiceCollection services)
-        {
-            services.AddAuthorizationBuilder()
-                .AddPolicy(Constants.Policies.MangerOrDeveloper, policyBuilder =>
-                {
-                    policyBuilder.RequireRole(Constants.Role.Manger, Constants.Role.Developer);
-                });
 
             return services;
         }

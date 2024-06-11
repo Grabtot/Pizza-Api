@@ -21,7 +21,7 @@ namespace PizzaApi.Application.Users.Commands
                 return Error.NotFound(description: $"User with id {userId} not found");
             }
 
-            IdentityResult result = await _userManager.AddToRoleAsync(user, Constants.Role.Manger);
+            IdentityResult result = await _userManager.AddToRoleAsync(user, Constants.Account.Manger);
 
             if (!result.Succeeded)
             {
