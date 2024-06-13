@@ -1,17 +1,19 @@
 ﻿using ErrorOr;
 using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Users;
 using PizzaApi.Application.Common.Interfaces;
-using PizzaApi.Application.Users.Commands;
+using PizzaApi.Application.Users.Commands.Login;
+using PizzaApi.Application.Users.Commands.SetManager;
 using PizzaApi.Application.Users.Queries;
 using PizzaApi.Domain.Users;
 
 namespace PizzaApi.Api.Controllers
 {
-    [Authorize]
     [Route("[controller]")]
     public class AccountController(IMapper mapper,
         IMediator mediator,
@@ -20,6 +22,7 @@ namespace PizzaApi.Api.Controllers
         private readonly ICurrentUserProvider _userProvider = currentUserProvider;
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             Guid id = _userProvider.UserId!.Value;
@@ -37,6 +40,24 @@ namespace PizzaApi.Api.Controllers
             ErrorOr<Success> result = await Mediator.Send(new SetMangerRopeCommand(userId));
 
             return result.Match(_ => NoContent(), Problem);
+        }
+
+        [HttpPost("login")]
+        public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>> Login(
+            [FromBody] LoginRequest login, [FromQuery] bool? useCookies,
+            [FromQuery] bool? useSeccionCookies)
+        {
+            LoginCommand command = new(login.Email, login.Password, useCookies, useSeccionCookies);
+
+            ErrorOr<Success> result = await Mediator.Send(command);
+
+            if (result.IsError)
+            {
+                return TypedResults.Problem(result.FirstError.Description,
+                    statusCode: StatusCodes.Status401Unauthorized);
+            }
+
+            return TypedResults.Empty;
         }
     }
 }
