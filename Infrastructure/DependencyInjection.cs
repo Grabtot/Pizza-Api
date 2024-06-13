@@ -123,8 +123,10 @@ namespace PizzaApi.Infrastructure
                 {
                     UserManager<User> userManager = scope.ServiceProvider
                         .GetRequiredService<UserManager<User>>();
+                    RoleManager<IdentityRole<Guid>> roleManager = scope.ServiceProvider
+                        .GetRequiredService<RoleManager<IdentityRole<Guid>>>();
 
-                    DatabaseSeeder seeder = new(userManager);
+                    DatabaseSeeder seeder = new(userManager, roleManager);
                     seeder.Seed();
                 }
             }
