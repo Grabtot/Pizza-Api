@@ -1,7 +1,6 @@
 using PizzaApi.Api;
 using PizzaApi.Api.Attributes;
 using PizzaApi.Application;
-using PizzaApi.Domain.Users;
 using PizzaApi.Infrastructure;
 using Serilog;
 

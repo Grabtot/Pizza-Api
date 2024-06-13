@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using PizzaApi.Application.Common.Constants;
 using PizzaApi.Domain.Users;
 
-namespace PizzaApi.Application.Users.Commands
+namespace PizzaApi.Application.Users.Commands.SetManager
 {
     public class SetMangerRopeCommandHandler(UserManager<User> userManager)
         : IRequestHandler<SetMangerRopeCommand, ErrorOr<Success>>
