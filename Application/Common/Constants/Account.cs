@@ -15,7 +15,9 @@
             public const string BearerAndApplication = "BearerAndApplication";
             public const string Bearer = "Bearer";
 
-
+            //User
+            public const int MinUserNameLength = 2;
+            public const int MaxUserNameLength = 30;
         }
     }
 }

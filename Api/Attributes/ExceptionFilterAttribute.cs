@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Serilog;
 
@@ -8,6 +9,14 @@ namespace PizzaApi.Api.Attributes
     {
         public override void OnException(ExceptionContext context)
         {
+            if (IsINotificationException(context.Exception))
+            {
+                LogError(context);
+                context.ExceptionHandled = true;
+
+                return;
+            }
+
             ProblemDetails problemDetails = new()
             {
                 Status = StatusCodes.Status500InternalServerError,
@@ -23,14 +32,25 @@ namespace PizzaApi.Api.Attributes
 
             context.ExceptionHandled = true;
 
-            Log.Error(context.Exception,
-               "Exception was thrown: {ExceptionType} - {Message}, Path: {Path}, Method: {Method}, Headers: {Headers}",
-               context.Exception.GetType().Name,
-               context.Exception.Message,
-               context.HttpContext.Request.Path,
-               context.HttpContext.Request.Method,
-               context.HttpContext.Request.Headers);
+            LogError(context);
         }
 
+        private static bool IsINotificationException(Exception exception)
+        {
+            return exception.TargetSite?.DeclaringType?.GetInterfaces()
+                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition()
+                        == typeof(INotificationHandler<>)) == true;
+        }
+
+        private static void LogError(ExceptionContext context)
+        {
+            Log.Error(context.Exception,
+                           "Exception was thrown: {ExceptionType} - {Message}, Path: {Path}, Method: {Method}, Headers: {Headers}",
+                           context.Exception.GetType().Name,
+                           context.Exception.Message,
+                           context.HttpContext.Request.Path,
+                           context.HttpContext.Request.Method,
+                           context.HttpContext.Request.Headers);
+        }
     }
 }
