@@ -2,7 +2,7 @@
 using PizzaApi.Infrastructure.Common.Interfaces;
 using Serilog;
 
-namespace PizzaApi.Infrastructure.Services
+namespace PizzaApi.Infrastructure.Services.Email
 {
     public class EmailService(IFluentEmailFactory emailFactory) : IEmailService
     {
