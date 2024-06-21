@@ -28,7 +28,8 @@ namespace PizzaApi.Infrastructure.Persistence
             user = new()
             {
                 Id = Guid.NewGuid(),
-                UserName = "Grabtot",
+                Name = "Grabtot",
+                UserName = email,
                 Email = email,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
