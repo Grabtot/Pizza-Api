@@ -16,6 +16,7 @@ namespace PizzaApi.Api
             services.AddMapping();
 
             services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
+            services.AddScoped<IAccountEmailSender, AccountEmailSender>();
 
             return services;
         }
