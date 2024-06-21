@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Users;
 using PizzaApi.Application.Common.Interfaces;
 using PizzaApi.Application.Users.Commands.Login;
+using PizzaApi.Application.Users.Commands.Register;
 using PizzaApi.Application.Users.Commands.SetManager;
 using PizzaApi.Application.Users.Queries;
 using PizzaApi.Domain.Users;
@@ -58,6 +59,27 @@ namespace PizzaApi.Api.Controllers
             }
 
             return TypedResults.Empty;
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterRequest request)
+        {
+            RegisterCommand command = Mapper.Map<RegisterCommand>(request);
+
+            ErrorOr<User> result = await Mediator.Send(command);
+
+            if (result.IsError)
+                return Problem(result.Errors);
+
+            await Mediator.Publish(new UserCreatedEvent(result.Value));
+
+            return Created();
+        }
+
+        [HttpGet("confirmEmail")]
+        public Task<IActionResult> ConfirmEmail(Guid userId, string code, string? changedEmail)
+        {
+            throw new NotImplementedException();
         }
     }
 }
