@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using PizzaApi.Domain.Users;
-using PizzaApi.Infrastructure.Common.Interfaces;
 
 namespace PizzaApi.Infrastructure.Services.Email
 {
