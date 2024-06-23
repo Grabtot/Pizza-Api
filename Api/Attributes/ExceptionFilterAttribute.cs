@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Serilog;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace PizzaApi.Api.Attributes
 {
@@ -9,7 +11,7 @@ namespace PizzaApi.Api.Attributes
     {
         public override void OnException(ExceptionContext context)
         {
-            if (IsINotificationException(context.Exception))
+            if (IsNotificationHandlerException(context.Exception))
             {
                 LogError(context);
                 context.ExceptionHandled = true;
@@ -35,11 +37,24 @@ namespace PizzaApi.Api.Attributes
             LogError(context);
         }
 
-        private static bool IsINotificationException(Exception exception)
+        private static bool IsNotificationHandlerException(Exception exception)
         {
-            return exception.TargetSite?.DeclaringType?.GetInterfaces()
-                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition()
-                        == typeof(INotificationHandler<>)) == true;
+            StackTrace stackTrace = new(exception, true);
+
+            foreach (StackFrame frame in stackTrace.GetFrames())
+            {
+                MethodBase? method = frame.GetMethod();
+                if (method != null)
+                {
+                    Type? declaringType = method.DeclaringType?.DeclaringType;
+                    if (declaringType != null && declaringType.GetInterfaces()
+                        .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(INotificationHandler<>)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private static void LogError(ExceptionContext context)
