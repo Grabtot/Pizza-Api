@@ -15,6 +15,7 @@ using PizzaApi.Application.Users.Commands.RefreshToken;
 using PizzaApi.Application.Users.Commands.Register;
 using PizzaApi.Application.Users.Commands.SetManager;
 using PizzaApi.Application.Users.Queries;
+using PizzaApi.Application.Users.Queries.ResendConfirmationEmail;
 using PizzaApi.Domain.Users;
 using System.Security.Claims;
 
@@ -95,15 +96,31 @@ namespace PizzaApi.Api.Controllers
 
         [HttpPost("refresh")]
         public async Task<Results<Ok<AccessTokenResponse>, UnauthorizedHttpResult,
-            SignInHttpResult, ChallengeHttpResult>> Refresh([FromBody] RefreshTokenRequest refreshTokenRequest)
+            SignInHttpResult, ChallengeHttpResult>> Refresh(RefreshTokenRequest request)
         {
             ErrorOr<ClaimsPrincipal> result = await Mediator
-                .Send(new RefreshTokenCommand(refreshTokenRequest.RefreshToken));
+                .Send(new RefreshTokenCommand(request.RefreshToken));
 
             if (result.IsError)
                 return TypedResults.Challenge();
 
             return TypedResults.SignIn(result.Value, authenticationScheme: Constants.Account.Bearer);
+        }
+
+        [HttpGet("resendConfirmationEmail")]
+        public async Task<IActionResult> ResendConfirmationEmail(ResendConfirmationEmailRequest request)
+        {
+            ErrorOr<Success> result = await Mediator.Send(new ResendConfirmationEmailQuery(request.Email));
+
+            if (result.IsError)
+            {
+                if (result.FirstError.Type == ErrorType.NotFound)
+                    return Ok();
+
+                return Problem(result.Errors);
+            }
+
+            return Ok();
         }
     }
 }
