@@ -6,14 +6,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Users;
+using PizzaApi.Application.Common.Constants;
 using PizzaApi.Application.Common.Interfaces;
 using PizzaApi.Application.Users.Commands.ConfirmAccount;
 using PizzaApi.Application.Users.Commands.ConfirmNewEmail;
 using PizzaApi.Application.Users.Commands.Login;
+using PizzaApi.Application.Users.Commands.RefreshToken;
 using PizzaApi.Application.Users.Commands.Register;
 using PizzaApi.Application.Users.Commands.SetManager;
 using PizzaApi.Application.Users.Queries;
 using PizzaApi.Domain.Users;
+using System.Security.Claims;
 
 namespace PizzaApi.Api.Controllers
 {
@@ -88,6 +91,19 @@ namespace PizzaApi.Api.Controllers
             ErrorOr<Success> result = await Mediator.Send(command);
 
             return result.Match(_ => NoContent(), Problem);
+        }
+
+        [HttpPost("refresh")]
+        public async Task<Results<Ok<AccessTokenResponse>, UnauthorizedHttpResult,
+            SignInHttpResult, ChallengeHttpResult>> Refresh([FromBody] RefreshTokenRequest refreshTokenRequest)
+        {
+            ErrorOr<ClaimsPrincipal> result = await Mediator
+                .Send(new RefreshTokenCommand(refreshTokenRequest.RefreshToken));
+
+            if (result.IsError)
+                return TypedResults.Challenge();
+
+            return TypedResults.SignIn(result.Value, authenticationScheme: Constants.Account.Bearer);
         }
     }
 }
