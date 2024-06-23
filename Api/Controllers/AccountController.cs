@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Users;
 using PizzaApi.Application.Common.Interfaces;
+using PizzaApi.Application.Users.Commands.ConfirmAccount;
+using PizzaApi.Application.Users.Commands.ConfirmNewEmail;
 using PizzaApi.Application.Users.Commands.Login;
 using PizzaApi.Application.Users.Commands.Register;
 using PizzaApi.Application.Users.Commands.SetManager;
@@ -77,9 +79,15 @@ namespace PizzaApi.Api.Controllers
         }
 
         [HttpGet("confirmEmail")]
-        public Task<IActionResult> ConfirmEmail(Guid userId, string code, string? changedEmail)
+        public async Task<IActionResult> ConfirmEmail(Guid userId, string code, string? changedEmail)
         {
-            throw new NotImplementedException();
+            IRequest<ErrorOr<Success>> command = changedEmail is null ?
+                new ConfirmAccountCommand(userId, code)
+                : new ConfirmNewEmailCommand(userId, code, changedEmail);
+
+            ErrorOr<Success> result = await Mediator.Send(command);
+
+            return result.Match(_ => NoContent(), Problem);
         }
     }
 }
