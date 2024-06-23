@@ -63,6 +63,7 @@ namespace PizzaApi.Infrastructure
             else
             {
                 services.AddTransient<IEmailSender, EmailSender>();
+                services.AddTransient<IEmailService, EmailService>();
 
                 services.AddFluentEmail(options.DefaultFromEmail);
 
@@ -86,7 +87,6 @@ namespace PizzaApi.Infrastructure
                 Log.Debug("Email options = {@emailSettings}", options);
             }
 
-            services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailSender<User>, UserEmailSender>();
 
 
