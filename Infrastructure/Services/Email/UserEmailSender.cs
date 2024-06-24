@@ -10,7 +10,7 @@ namespace PizzaApi.Infrastructure.Services.Email
 
         public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
         {
-            string htmlMessage = $"Hi, {user.UserName}! Please confirm your account by " +
+            string htmlMessage = $"Hi, {user.Name}! Please confirm your account by " +
                 $"<a href=\"{confirmationLink}\">clicking here</a>.";
 
             await _emailSender.SendEmailAsync(email, "Confirm your email", htmlMessage);

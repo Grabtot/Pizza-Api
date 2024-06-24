@@ -21,7 +21,7 @@ namespace PizzaApi.Application.Users.Commands.ConfirmNewEmail
 
             string decodedCode = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(command.Code));
 
-            IdentityResult result = await _userManager.ChangeEmailAsync(user, decodedCode, command.Email);
+            IdentityResult result = await _userManager.ChangeEmailAsync(user, command.Email, decodedCode);
 
             if (!result.Succeeded)
             {

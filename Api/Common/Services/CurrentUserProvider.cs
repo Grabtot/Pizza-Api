@@ -14,13 +14,13 @@ namespace PizzaApi.Api.Common.Services
             {
                 string? id = _httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                Guid.TryParse(id, out Guid userId);
+                bool isId = Guid.TryParse(id, out Guid userId);
 
-                return userId;
+                return isId ? userId : null;
             }
         }
         public string? UserName => _httpContext.User.FindFirst(ClaimTypes.Name)?.Value;
-
         public string? Role => _httpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+        public string? Email => _httpContext.User.FindFirst(ClaimTypes.Email)?.Value;
     }
 }
