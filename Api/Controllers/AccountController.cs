@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Users;
 using PizzaApi.Application.Common.Constants;
 using PizzaApi.Application.Common.Interfaces;
+using PizzaApi.Application.Users.Commands.ChangePassword;
 using PizzaApi.Application.Users.Commands.ConfirmAccount;
 using PizzaApi.Application.Users.Commands.ConfirmNewEmail;
 using PizzaApi.Application.Users.Commands.Login;
@@ -63,7 +64,7 @@ namespace PizzaApi.Api.Controllers
 
             if (result.IsError)
             {
-                return TypedResults.Problem(result.FirstError.Description,
+                return TypedResults.Problem("Invalid email or password",
                     statusCode: StatusCodes.Status401Unauthorized);
             }
 
@@ -148,11 +149,24 @@ namespace PizzaApi.Api.Controllers
         [HttpGet("changeEmail")]
         public async Task<IActionResult> ChangeEmail(ChangeEmailRequest request)
         {
-            ChangeEmailQuery command = new(_userProvider.Email!, request.NewEmail);
+            ChangeEmailQuery command = new(_userProvider.UserId!.Value, request.NewEmail);
 
             ErrorOr<Success> result = await Mediator.Send(command);
 
             return result.Match(_ => Ok(), Problem);
+        }
+
+        [Authorize]
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+        {
+            ChangePasswordCommand command = new(_userProvider.UserId!.Value,
+                request.CurrentPassword,
+                request.NewPassword);
+
+            ErrorOr<Success> result = await Mediator.Send(command);
+
+            return result.Match(_ => NoContent(), Problem);
         }
     }
 }

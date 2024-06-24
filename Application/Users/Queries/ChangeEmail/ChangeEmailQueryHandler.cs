@@ -15,7 +15,7 @@ namespace PizzaApi.Application.Users.Queries.ChangeEmail
 
         public async Task<ErrorOr<Success>> Handle(ChangeEmailQuery command, CancellationToken cancellationToken)
         {
-            User? user = await _userManager.FindByEmailAsync(command.OldEmail);
+            User? user = await _userManager.FindByIdAsync(command.UserId.ToString());
 
             if (user is null)
                 return Error.Unauthorized();
