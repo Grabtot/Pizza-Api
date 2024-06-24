@@ -36,17 +36,19 @@ namespace PizzaApi.Infrastructure.Authentication
         /// <returns>The <see cref="IServiceCollection"/> with added authentication services.</returns>
         private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
+            PasswordOptions? passwordOptions = TryGetIdentityOptionsSections<PasswordOptions>(configuration);
+            SignInOptions? signInOptions = TryGetIdentityOptionsSections<SignInOptions>(configuration);
+            LockoutOptions? lockoutOptions = TryGetIdentityOptionsSections<LockoutOptions>(configuration);
+            UserOptions? userOptions = TryGetIdentityOptionsSections<UserOptions>(configuration);
+            ClaimsIdentityOptions? claimsIdentityOptions = TryGetIdentityOptionsSections<ClaimsIdentityOptions>(configuration);
+            TokenOptions? tokenOptions = TryGetIdentityOptionsSections<TokenOptions>(configuration);
+            StoreOptions? storeOptions = TryGetIdentityOptionsSections<StoreOptions>(configuration);
+
+            if (passwordOptions != null)
+                services.AddSingleton(passwordOptions);
 
             services.AddIdentity(options =>
             {
-                PasswordOptions? passwordOptions = TryGetIdentityOptionsSections<PasswordOptions>(configuration);
-                SignInOptions? signInOptions = TryGetIdentityOptionsSections<SignInOptions>(configuration);
-                LockoutOptions? lockoutOptions = TryGetIdentityOptionsSections<LockoutOptions>(configuration);
-                UserOptions? userOptions = TryGetIdentityOptionsSections<UserOptions>(configuration);
-                ClaimsIdentityOptions? claimsIdentityOptions = TryGetIdentityOptionsSections<ClaimsIdentityOptions>(configuration);
-                TokenOptions? tokenOptions = TryGetIdentityOptionsSections<TokenOptions>(configuration);
-                StoreOptions? storeOptions = TryGetIdentityOptionsSections<StoreOptions>(configuration);
-
                 options.Password = passwordOptions ?? options.Password;
                 options.SignIn = signInOptions ?? options.SignIn;
                 options.Lockout = lockoutOptions ?? options.Lockout;
