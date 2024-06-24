@@ -34,13 +34,35 @@ namespace PizzaApi.Api.Common.Services
 
             if (isChange)
                 routeValues.Add("changedEmail", email);
-
-            string? confirmEmailUrl = _linkGenerator.GetUriByAction(_httpContext,
-                nameof(AccountController.ConfirmEmail),
-                "account", routeValues)
-                ?? throw new NotSupportedException($"Could not find endpoint named '{nameof(AccountController.ConfirmEmail)}'.");
+            string confirmEmailUrl = GenarateAccountControllerLink(nameof(AccountController.ConfirmEmail), routeValues);
 
             await _emailSender.SendConfirmationLinkAsync(user, email, HtmlEncoder.Default.Encode(confirmEmailUrl));
+        }
+
+
+        public async Task SendPasswordRecoveryEmailAsync(User user, bool sendCode = false)
+        {
+            string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+            RouteValueDictionary routeValues = new()
+            {
+                ["code"] = code
+            };
+
+            if (!sendCode)
+            {
+                string recoveryUrl = GenarateAccountControllerLink(nameof(AccountController.ResetPassword), routeValues);
+                await _emailSender.SendPasswordResetLinkAsync(user, user.Email!, recoveryUrl);
+            }
+            else
+                await emailSender.SendPasswordResetCodeAsync(user, user.Email!, HtmlEncoder.Default.Encode(code));
+        }
+
+        private string GenarateAccountControllerLink(string endpoint, RouteValueDictionary routeValues)
+        {
+            return _linkGenerator.GetUriByAction(_httpContext, endpoint, "account", routeValues)
+                ?? throw new NotSupportedException($"Could not find endpoint named '{endpoint}'.");
         }
     }
 }
