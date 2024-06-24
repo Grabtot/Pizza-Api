@@ -24,6 +24,7 @@ namespace PizzaApi.Application
 
                 options.AddOpenBehavior(typeof(LoggingBehavior<,>));
                 options.AddOpenBehavior(typeof(ValidationBehavior<,>));
+                options.AddOpenBehavior(typeof(TransactionBehavior<,>));
             });
 
             return services;

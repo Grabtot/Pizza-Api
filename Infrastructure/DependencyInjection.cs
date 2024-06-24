@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PizzaApi.Application.Common.Interfaces;
 using PizzaApi.Application.Common.Interfaces.Repositories;
 using PizzaApi.Domain.Users;
 using PizzaApi.Infrastructure.Authentication;
-using PizzaApi.Infrastructure.Common.Interfaces;
 using PizzaApi.Infrastructure.Common.Options;
 using PizzaApi.Infrastructure.Persistence;
 using PizzaApi.Infrastructure.Persistence.Repositories;
@@ -41,7 +41,7 @@ namespace PizzaApi.Infrastructure
             services.AddDbContext<PizzaDbContext>(options
                 => options.UseNpgsql(connectionString));
 
-
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddRepositories();
 
             services.AddEmailSender(configuration);

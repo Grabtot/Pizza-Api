@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Users;
 using PizzaApi.Application.Common.Constants;
 using PizzaApi.Application.Common.Interfaces;
+using PizzaApi.Application.Users.Commands.ChangeName;
 using PizzaApi.Application.Users.Commands.ChangePassword;
 using PizzaApi.Application.Users.Commands.ConfirmAccount;
 using PizzaApi.Application.Users.Commands.ConfirmNewEmail;
@@ -20,6 +21,7 @@ using PizzaApi.Application.Users.Queries;
 using PizzaApi.Application.Users.Queries.ChangeEmail;
 using PizzaApi.Application.Users.Queries.ForgotPassword;
 using PizzaApi.Application.Users.Queries.ResendConfirmationEmail;
+using PizzaApi.Application.Users.Queries.UserInfo;
 using PizzaApi.Domain.Users;
 using System.Security.Claims;
 
@@ -165,6 +167,17 @@ namespace PizzaApi.Api.Controllers
                 request.NewPassword);
 
             ErrorOr<Success> result = await Mediator.Send(command);
+
+            return result.Match(_ => NoContent(), Problem);
+        }
+
+        [Authorize]
+        [HttpPost("changeName")]
+        public async Task<IActionResult> ChangeName(string newName)
+        {
+            ChangeNameCommand command = new(_userProvider.UserId!.Value, newName);
+
+            ErrorOr<User> result = await Mediator.Send(command);
 
             return result.Match(_ => NoContent(), Problem);
         }

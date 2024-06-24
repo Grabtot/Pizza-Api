@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using PizzaApi.Infrastructure.Common.Interfaces;
+using PizzaApi.Application.Common.Interfaces;
 
 namespace PizzaApi.Infrastructure.Services.Email
 {
