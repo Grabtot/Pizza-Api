@@ -12,12 +12,12 @@ using PizzaApi.Application.Users.Commands.ChangeName;
 using PizzaApi.Application.Users.Commands.ChangePassword;
 using PizzaApi.Application.Users.Commands.ConfirmAccount;
 using PizzaApi.Application.Users.Commands.ConfirmNewEmail;
+using PizzaApi.Application.Users.Commands.DelateUser;
 using PizzaApi.Application.Users.Commands.Login;
 using PizzaApi.Application.Users.Commands.RefreshToken;
 using PizzaApi.Application.Users.Commands.Register;
 using PizzaApi.Application.Users.Commands.ResetPassword;
 using PizzaApi.Application.Users.Commands.SetManager;
-using PizzaApi.Application.Users.Queries;
 using PizzaApi.Application.Users.Queries.ChangeEmail;
 using PizzaApi.Application.Users.Queries.ForgotPassword;
 using PizzaApi.Application.Users.Queries.ResendConfirmationEmail;
@@ -180,6 +180,15 @@ namespace PizzaApi.Api.Controllers
             ErrorOr<User> result = await Mediator.Send(command);
 
             return result.Match(_ => NoContent(), Problem);
+        }
+
+        [Authorize]
+        [HttpDelete("deleteAccount")]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            await Mediator.Send(new DelateUserCommand(_userProvider.UserId!.Value));
+
+            return NoContent();
         }
     }
 }
