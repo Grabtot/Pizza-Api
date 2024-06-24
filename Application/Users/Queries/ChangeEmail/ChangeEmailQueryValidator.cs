@@ -6,7 +6,6 @@ namespace PizzaApi.Application.Users.Queries.ChangeEmail
     {
         public ChangeEmailQueryValidator()
         {
-            RuleFor(c => c.OldEmail).NotNull().EmailAddress();
             RuleFor(c => c.NewEmail).NotNull().EmailAddress();
         }
     }

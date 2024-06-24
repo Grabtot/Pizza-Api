@@ -1,5 +1,5 @@
 ﻿using FluentEmail.Core;
-using PizzaApi.Infrastructure.Common.Interfaces;
+using PizzaApi.Application.Common.Interfaces;
 using Serilog;
 
 namespace PizzaApi.Infrastructure.Services.Email

@@ -3,7 +3,7 @@ using MediatR;
 using PizzaApi.Application.Common.Interfaces.Repositories;
 using PizzaApi.Domain.Users;
 
-namespace PizzaApi.Application.Users.Queries
+namespace PizzaApi.Application.Users.Queries.UserInfo
 {
     public class UserInfoQueryHandler(IUsersRepository usersRepository)
         : IRequestHandler<UserInfoQuery, ErrorOr<User>>

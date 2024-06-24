@@ -1,4 +1,4 @@
-﻿namespace PizzaApi.Infrastructure.Common.Interfaces
+﻿namespace PizzaApi.Application.Common.Interfaces
 {
     public interface IEmailService
     {
