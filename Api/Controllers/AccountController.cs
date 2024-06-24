@@ -28,12 +28,12 @@ namespace PizzaApi.Api.Controllers
     {
         private readonly ICurrentUserProvider _userProvider = currentUserProvider;
 
-        [HttpGet]
+        [HttpGet("info")]
         [Authorize]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Info()
         {
             Guid id = _userProvider.UserId!.Value;
-            ErrorOr<User> result = await Mediator.Send(new GetUserQuery(id));
+            ErrorOr<User> result = await Mediator.Send(new UserInfoQuery(id));
 
             return result.Match(
                 user => Ok(Mapper.Map<UserResponse>(user)),
@@ -122,5 +122,6 @@ namespace PizzaApi.Api.Controllers
 
             return Ok();
         }
+
     }
 }
