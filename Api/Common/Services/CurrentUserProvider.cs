@@ -20,5 +20,7 @@ namespace PizzaApi.Api.Common.Services
             }
         }
         public string? UserName => _httpContext.User.FindFirst(ClaimTypes.Name)?.Value;
+
+        public string? Role => _httpContext.User.FindFirst(ClaimTypes.Role)?.Value;
     }
 }
