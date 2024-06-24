@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using PizzaApi.Application.Common.Validation;
 
 namespace PizzaApi.Application.Users.Commands.Register

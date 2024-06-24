@@ -10,20 +10,24 @@ namespace PizzaApi.Infrastructure.Services.Email
 
         public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
         {
-            string htmlMEssage = $"Hi, {user.UserName}! Please confirm your account by " +
+            string htmlMessage = $"Hi, {user.UserName}! Please confirm your account by " +
                 $"<a href=\"{confirmationLink}\">clicking here</a>.";
 
-            await _emailSender.SendEmailAsync(email, "Confirm your email", htmlMEssage);
+            await _emailSender.SendEmailAsync(email, "Confirm your email", htmlMessage);
         }
 
-        public Task SendPasswordResetCodeAsync(User user, string email, string resetCode)
+        public async Task SendPasswordResetCodeAsync(User user, string email, string resetCode)
         {
-            throw new NotImplementedException();
+            string htmlMessage = $"Please reset your password using the following code: {resetCode}";
+
+            await _emailSender.SendEmailAsync(email, "Reset your password", htmlMessage);
         }
 
-        public Task SendPasswordResetLinkAsync(User user, string email, string resetLink)
+        public async Task SendPasswordResetLinkAsync(User user, string email, string resetLink)
         {
-            throw new NotImplementedException();
+            string htmlMessage = $"Please reset your password by <a href=\"{resetLink}\"> clicking here </a>.";
+
+            await _emailSender.SendEmailAsync(email, "Reset your password", htmlMessage);
         }
     }
 }

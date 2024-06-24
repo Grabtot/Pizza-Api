@@ -13,8 +13,10 @@ using PizzaApi.Application.Users.Commands.ConfirmNewEmail;
 using PizzaApi.Application.Users.Commands.Login;
 using PizzaApi.Application.Users.Commands.RefreshToken;
 using PizzaApi.Application.Users.Commands.Register;
+using PizzaApi.Application.Users.Commands.ResetPassword;
 using PizzaApi.Application.Users.Commands.SetManager;
 using PizzaApi.Application.Users.Queries;
+using PizzaApi.Application.Users.Queries.ForgotPassword;
 using PizzaApi.Application.Users.Queries.ResendConfirmationEmail;
 using PizzaApi.Domain.Users;
 using System.Security.Claims;
@@ -121,6 +123,24 @@ namespace PizzaApi.Api.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpGet("forgotPassword")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+        {
+            ErrorOr<Success> result = await Mediator.Send(new ForgotPasswordQuery(request.Email));
+
+            return result.Match(_ => NoContent(), Problem);
+        }
+
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        {
+            ResetPasswordCommand command = Mapper.Map<ResetPasswordCommand>(request);
+
+            ErrorOr<Success> result = await Mediator.Send(command);
+
+            return result.Match(_ => NoContent(), Problem);
         }
 
     }
