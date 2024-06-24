@@ -13,13 +13,11 @@ namespace PizzaApi.Application.Users.Commands.SetManager
 
         public async Task<ErrorOr<Success>> Handle(SetMangerRopeCommand command, CancellationToken cancellationToken)
         {
-            Guid userId = command.UserId;
-            User? user = await _userManager.FindByIdAsync(userId.ToString());
+            User? user = await _userManager.FindByEmailAsync(command.Email);
 
-            if (user == null)
-            {
-                return Error.NotFound(description: $"User with id {userId} not found");
-            }
+            if (user is null)
+                return Error.NotFound(description: $"User with email {command.Email} not found");
+
 
             IdentityResult result = await _userManager.AddToRoleAsync(user, Constants.Account.Manger);
 

@@ -8,8 +8,9 @@ namespace PizzaApi.Api.Common.Mapping
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<User, UserResponse>()
-                .Map(response => response, user => user);
+            config.NewConfig<(User User, string? Role), UserResponse>()
+                .Map(response => response, src => src.User)
+                .Map(response => response.Role, srs => srs.Role);
         }
     }
 }

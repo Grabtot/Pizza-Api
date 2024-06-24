@@ -38,15 +38,15 @@ namespace PizzaApi.Api.Controllers
             ErrorOr<User> result = await Mediator.Send(new UserInfoQuery(id));
 
             return result.Match(
-                user => Ok(Mapper.Map<UserResponse>(user)),
+                user => Ok(Mapper.Map<UserResponse>((user, _userProvider.Role))),
                 Problem);
         }
 
         [HttpPost("createManger")]
-        //[Authorize(Constants.Policies.MangerOrDeveloper)]
-        public async Task<IActionResult> CreateManger([FromQuery] Guid userId)
+        [Authorize(Constants.Account.MangerOrDeveloper)]
+        public async Task<IActionResult> CreateManger(string email)
         {
-            ErrorOr<Success> result = await Mediator.Send(new SetMangerRopeCommand(userId));
+            ErrorOr<Success> result = await Mediator.Send(new SetMangerRopeCommand(email));
 
             return result.Match(_ => NoContent(), Problem);
         }
