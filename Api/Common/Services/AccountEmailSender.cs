@@ -56,7 +56,7 @@ namespace PizzaApi.Api.Common.Services
                 await _emailSender.SendPasswordResetLinkAsync(user, user.Email!, recoveryUrl);
             }
             else
-                await emailSender.SendPasswordResetCodeAsync(user, user.Email!, HtmlEncoder.Default.Encode(code));
+                await _emailSender.SendPasswordResetCodeAsync(user, user.Email!, HtmlEncoder.Default.Encode(code));
         }
 
         private string GenarateAccountControllerLink(string endpoint, RouteValueDictionary routeValues)

@@ -16,6 +16,7 @@ using PizzaApi.Application.Users.Commands.Register;
 using PizzaApi.Application.Users.Commands.ResetPassword;
 using PizzaApi.Application.Users.Commands.SetManager;
 using PizzaApi.Application.Users.Queries;
+using PizzaApi.Application.Users.Queries.ChangeEmail;
 using PizzaApi.Application.Users.Queries.ForgotPassword;
 using PizzaApi.Application.Users.Queries.ResendConfirmationEmail;
 using PizzaApi.Domain.Users;
@@ -81,7 +82,7 @@ namespace PizzaApi.Api.Controllers
 
             await Mediator.Publish(new UserCreatedEvent(result.Value));
 
-            return Created();
+            return CreatedAtAction(nameof(Info), null);
         }
 
         [HttpGet("confirmEmail")]
@@ -93,7 +94,7 @@ namespace PizzaApi.Api.Controllers
 
             ErrorOr<Success> result = await Mediator.Send(command);
 
-            return result.Match(_ => NoContent(), Problem);
+            return result.Match(_ => Ok(), Problem);
         }
 
         [HttpPost("refresh")]
@@ -130,7 +131,7 @@ namespace PizzaApi.Api.Controllers
         {
             ErrorOr<Success> result = await Mediator.Send(new ForgotPasswordQuery(request.Email));
 
-            return result.Match(_ => NoContent(), Problem);
+            return result.Match(_ => Ok(), Problem);
         }
 
         [HttpPost("resetPassword")]
@@ -143,5 +144,15 @@ namespace PizzaApi.Api.Controllers
             return result.Match(_ => NoContent(), Problem);
         }
 
+        [Authorize]
+        [HttpGet("changeEmail")]
+        public async Task<IActionResult> ChangeEmail(ChangeEmailRequest request)
+        {
+            ChangeEmailQuery command = new(_userProvider.Email!, request.NewEmail);
+
+            ErrorOr<Success> result = await Mediator.Send(command);
+
+            return result.Match(_ => Ok(), Problem);
+        }
     }
 }
