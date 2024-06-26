@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
+using PizzaApi.Api.Common.Options;
 using PizzaApi.Api.Controllers;
 using PizzaApi.Application.Common.Interfaces;
 using PizzaApi.Domain.Users;
@@ -11,11 +13,13 @@ namespace PizzaApi.Api.Common.Services
     public class AccountEmailSender(UserManager<User> userManager,
         LinkGenerator linkGenerator,
         IHttpContextAccessor contextAccessor,
-        IEmailSender<User> emailSender) : IAccountEmailSender
+        IEmailSender<User> emailSender,
+        IOptions<ClientAppOptions> clientAppOptions) : IAccountEmailSender
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IEmailSender<User> _emailSender = emailSender;
         private readonly LinkGenerator _linkGenerator = linkGenerator;
+        private readonly ClientAppOptions _clientAppOptions = clientAppOptions.Value;
         private readonly HttpContext _httpContext = contextAccessor.HttpContext
             ?? throw new ArgumentNullException();
 
@@ -34,7 +38,7 @@ namespace PizzaApi.Api.Common.Services
 
             if (isChange)
                 routeValues.Add("changedEmail", email);
-            string confirmEmailUrl = GenarateAccountControllerLink(nameof(AccountController.ConfirmEmail), routeValues);
+            string confirmEmailUrl = GenarateAccountControllerLink(LinkType.EmailConfirm, routeValues);
 
             await _emailSender.SendConfirmationLinkAsync(user, email, HtmlEncoder.Default.Encode(confirmEmailUrl));
         }
@@ -47,22 +51,48 @@ namespace PizzaApi.Api.Common.Services
 
             RouteValueDictionary routeValues = new()
             {
-                ["code"] = code
+                ["code"] = code,
+                ["email"] = user.Email
             };
 
             if (!sendCode)
             {
-                string recoveryUrl = GenarateAccountControllerLink(nameof(AccountController.ResetPassword), routeValues);
+                string recoveryUrl = GenarateAccountControllerLink(LinkType.PasswordReset, routeValues);
                 await _emailSender.SendPasswordResetLinkAsync(user, user.Email!, recoveryUrl);
             }
             else
                 await _emailSender.SendPasswordResetCodeAsync(user, user.Email!, HtmlEncoder.Default.Encode(code));
         }
 
-        private string GenarateAccountControllerLink(string endpoint, RouteValueDictionary routeValues)
+        private string GenarateAccountControllerLink(LinkType linkType, RouteValueDictionary routeValues)
         {
-            return _linkGenerator.GetUriByAction(_httpContext, endpoint, "account", routeValues)
-                ?? throw new NotSupportedException($"Could not find endpoint named '{endpoint}'.");
+            bool useClientUrisInEmails = _clientAppOptions.UseClientUrisInEmails;
+            string path = linkType switch
+            {
+                LinkType.EmailConfirm => useClientUrisInEmails ? _clientAppOptions.ConfirmationPath :
+                                        "account/confirmEmail",
+                LinkType.PasswordReset => useClientUrisInEmails ? _clientAppOptions.PasswordResetPath :
+                                        "account/resetPassword",
+                _ => throw new ArgumentException(),
+            };
+
+            string? baseUri = useClientUrisInEmails ? _clientAppOptions.BaseUrl
+                : $"https://{_httpContext.Request.Host}";
+
+
+            UriBuilder builder = new(baseUri)
+            {
+                Path = path,
+                Query = string.Join("&", routeValues.Select(kvp => $"{kvp.Key}={kvp.Value}"))
+            };
+
+            return builder.ToString();
+        }
+
+        enum LinkType
+        {
+            EmailConfirm,
+            PasswordReset
         }
     }
 }
