@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using PizzaApi.Domain.Common.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PizzaApi.Domain.Users
 {
-    public class User : IdentityUser<Guid>
+    public class User : IdentityUser<Guid>, IAuditableEntity
     {
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
