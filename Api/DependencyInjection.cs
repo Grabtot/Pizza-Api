@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MapsterMapper;
+using PizzaApi.Api.Common.Options;
 using PizzaApi.Api.Common.Services;
 using PizzaApi.Application.Common.Interfaces;
 using Serilog;
@@ -17,6 +18,8 @@ namespace PizzaApi.Api
 
             services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
             services.AddScoped<IAccountEmailSender, AccountEmailSender>();
+
+            services.Configure<ClientAppOptions>(configuration.GetSection(ClientAppOptions.SectionName));
 
             return services;
         }
