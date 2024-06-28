@@ -46,7 +46,7 @@ namespace PizzaApi.Infrastructure.Persistence
         private void SeedRoles()
         {
             Log.Information("Seeding roles");
-            string managerRoleName = Constants.Account.Manger;
+            string managerRoleName = Constants.Account.Manager;
 
             IdentityRole<Guid>? mangaer = _roleManager.FindByNameAsync(managerRoleName).Result;
 

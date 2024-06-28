@@ -85,7 +85,7 @@ namespace PizzaApi.Infrastructure.Authentication
             services.AddAuthorizationBuilder()
                 .AddPolicy(Constants.Account.MangerOrDeveloper, policyBuilder =>
                 {
-                    policyBuilder.RequireRole(Constants.Account.Manger, Constants.Account.Developer);
+                    policyBuilder.RequireRole(Constants.Account.Manager, Constants.Account.Developer);
                 });
 
             return services;
