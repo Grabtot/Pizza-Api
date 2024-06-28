@@ -2,9 +2,9 @@
 
 namespace PizzaApi.Application.Users.Commands.SetManager
 {
-    public class SetMangerRopeCommandValidator : AbstractValidator<SetMangerRopeCommand>
+    public class SetMangerRoleCommandValidator : AbstractValidator<SetMangerRoleCommand>
     {
-        public SetMangerRopeCommandValidator()
+        public SetMangerRoleCommandValidator()
         {
             RuleFor(c => c.Email).NotNull().EmailAddress();
         }

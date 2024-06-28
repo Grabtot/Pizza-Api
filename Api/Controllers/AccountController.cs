@@ -50,7 +50,7 @@ namespace PizzaApi.Api.Controllers
         [Authorize(Constants.Account.MangerOrDeveloper)]
         public async Task<IActionResult> CreateManger(string email)
         {
-            ErrorOr<Success> result = await Mediator.Send(new SetMangerRopeCommand(email));
+            ErrorOr<Success> result = await Mediator.Send(new SetMangerRoleCommand(email));
 
             return result.Match(_ => NoContent(), Problem);
         }
