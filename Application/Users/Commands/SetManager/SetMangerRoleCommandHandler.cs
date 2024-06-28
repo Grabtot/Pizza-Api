@@ -6,12 +6,12 @@ using PizzaApi.Domain.Users;
 
 namespace PizzaApi.Application.Users.Commands.SetManager
 {
-    public class SetMangerRopeCommandHandler(UserManager<User> userManager)
-        : IRequestHandler<SetMangerRopeCommand, ErrorOr<Success>>
+    public class SetMangerRoleCommandHandler(UserManager<User> userManager)
+        : IRequestHandler<SetMangerRoleCommand, ErrorOr<Success>>
     {
         private readonly UserManager<User> _userManager = userManager;
 
-        public async Task<ErrorOr<Success>> Handle(SetMangerRopeCommand command, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Success>> Handle(SetMangerRoleCommand command, CancellationToken cancellationToken)
         {
             User? user = await _userManager.FindByEmailAsync(command.Email);
 
