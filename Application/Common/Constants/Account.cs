@@ -8,7 +8,7 @@
             public const string MangerOrDeveloper = "MangerOrDeveloper";
 
             //Roles
-            public const string Manger = "Manger";
+            public const string Manager = "Manager";
             public const string Developer = "Developer";
 
             //Schemes

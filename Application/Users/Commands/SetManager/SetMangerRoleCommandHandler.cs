@@ -19,7 +19,7 @@ namespace PizzaApi.Application.Users.Commands.SetManager
                 return Error.NotFound(description: $"User with email {command.Email} not found");
 
 
-            IdentityResult result = await _userManager.AddToRoleAsync(user, Constants.Account.Manger);
+            IdentityResult result = await _userManager.AddToRoleAsync(user, Constants.Account.Manager);
 
             if (!result.Succeeded)
             {
