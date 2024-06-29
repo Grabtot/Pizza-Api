@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Users;
 using PizzaApi.Application.Common.Constants;
@@ -20,6 +21,7 @@ using PizzaApi.Application.Users.Commands.ResetPassword;
 using PizzaApi.Application.Users.Commands.SetManager;
 using PizzaApi.Application.Users.Queries.ChangeEmail;
 using PizzaApi.Application.Users.Queries.ForgotPassword;
+using PizzaApi.Application.Users.Queries.PasswordRequirements;
 using PizzaApi.Application.Users.Queries.ResendConfirmationEmail;
 using PizzaApi.Application.Users.Queries.UserInfo;
 using PizzaApi.Domain.Users;
@@ -46,6 +48,12 @@ namespace PizzaApi.Api.Controllers
                 Problem);
         }
 
+        [HttpGet("passwordRequirements")]
+        public async Task<ActionResult<PasswordOptions>> PasswordRequirements()
+        {
+            return await Mediator.Send(new PasswordRequirementsQuery());
+        }
+
         [HttpPost("createManger")]
         [Authorize(Constants.Account.MangerOrDeveloper)]
         public async Task<IActionResult> CreateManger(string email)
@@ -58,9 +66,9 @@ namespace PizzaApi.Api.Controllers
         [HttpPost("login")]
         public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>> Login(
             [FromBody] LoginRequest login, [FromQuery] bool? useCookies,
-            [FromQuery] bool? useSeccionCookies)
+            [FromQuery] bool? useSessionCookies)
         {
-            LoginCommand command = new(login.Email, login.Password, useCookies, useSeccionCookies);
+            LoginCommand command = new(login.Email, login.Password, useCookies, useSessionCookies);
 
             ErrorOr<Success> result = await Mediator.Send(command);
 
@@ -88,7 +96,7 @@ namespace PizzaApi.Api.Controllers
             return CreatedAtAction(nameof(Info), null);
         }
 
-        [HttpGet("confirmEmail")]
+        [HttpPost("confirmEmail")]
         public async Task<IActionResult> ConfirmEmail(Guid userId, string code, string? changedEmail)
         {
             IRequest<ErrorOr<Success>> command = changedEmail is null ?
@@ -113,7 +121,7 @@ namespace PizzaApi.Api.Controllers
             return TypedResults.SignIn(result.Value, authenticationScheme: Constants.Account.Bearer);
         }
 
-        [HttpGet("resendConfirmationEmail")]
+        [HttpPost("resendConfirmationEmail")]
         public async Task<IActionResult> ResendConfirmationEmail(ResendConfirmationEmailRequest request)
         {
             ErrorOr<Success> result = await Mediator.Send(new ResendConfirmationEmailQuery(request.Email));
@@ -129,7 +137,7 @@ namespace PizzaApi.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("forgotPassword")]
+        [HttpPost("forgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
         {
             ErrorOr<Success> result = await Mediator.Send(new ForgotPasswordQuery(request.Email));
@@ -148,7 +156,7 @@ namespace PizzaApi.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("changeEmail")]
+        [HttpPost("changeEmail")]
         public async Task<IActionResult> ChangeEmail(ChangeEmailRequest request)
         {
             ChangeEmailQuery command = new(_userProvider.UserId!.Value, request.NewEmail);
