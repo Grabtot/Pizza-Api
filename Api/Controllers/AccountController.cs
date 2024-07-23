@@ -29,7 +29,7 @@ using System.Security.Claims;
 
 namespace PizzaApi.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("/api/[controller]")]
     public class AccountController(IMapper mapper,
         IMediator mediator,
         ICurrentUserProvider currentUserProvider) : ApiController(mapper, mediator)
