@@ -20,7 +20,7 @@ namespace PizzaApi.Application.Users.Queries.ForgotPassword
             if (user == null || !user.EmailConfirmed)
                 return Error.Unauthorized();
 
-            await _emailSender.SendPasswordRecoveryEmailAsync(user, true);
+            await _emailSender.SendPasswordRecoveryEmailAsync(user, false);
             return Result.Success;
         }
     }
