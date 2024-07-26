@@ -4,11 +4,20 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
 {
     public class Allergen : IAuditableEntity
     {
+        private string _name;
+
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name; set
+            {
+                _name = value;
+                NormalizedName = value.ToUpper();
+            }
+        }
         public string? Description { get; set; }
-        private string NormalizedName => Name.ToUpper();
+        public string NormalizedName { get; private set; }
 
 #pragma warning disable CS8618 
         private Allergen() { }
@@ -16,7 +25,8 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
 
         public Allergen(string name, string? description = null)
         {
-            Name = name;
+            _name = name;
+            NormalizedName = name.ToUpper();
             Description = description;
         }
 
