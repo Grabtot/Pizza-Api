@@ -5,10 +5,21 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
 {
     public class Tag : IAuditableEntity
     {
+        private string _name;
+
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public string Name { get; set; }
-        private string NormalizedName => Name.ToUpper();
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                NormalizedName = value.ToUpper();
+            }
+        }
+
+        public string NormalizedName { get; private set; }
         public Color? Color { get; set; }
 
 #pragma warning disable CS8618 
@@ -17,7 +28,8 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
 
         public Tag(string name, Color? color = null)
         {
-            Name = name;
+            _name = name;
+            NormalizedName = name.ToUpper();
             Color = color;
         }
 
