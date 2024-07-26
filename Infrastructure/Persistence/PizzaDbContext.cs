@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PizzaApi.Domain.Common.Interfaces;
+using PizzaApi.Domain.Ingredients;
+using PizzaApi.Domain.Ingredients.ValueObjects;
+using PizzaApi.Domain.Pizzas;
 using PizzaApi.Domain.Users;
 
 namespace PizzaApi.Infrastructure.Persistence
@@ -10,6 +13,11 @@ namespace PizzaApi.Infrastructure.Persistence
     public class PizzaDbContext(DbContextOptions<PizzaDbContext> options)
         : IdentityDbContext<User, IdentityRole<Guid>, Guid>(options)
     {
+        public DbSet<Pizza> Pizzas { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Allergen> Allergens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(typeof(PizzaDbContext).Assembly);
