@@ -19,6 +19,7 @@ services.AddControllers(options =>
     options.Filters.Add<ExceptionFilterAttribute>();
 });
 
+services.AddProblemDetails();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 

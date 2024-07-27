@@ -4,7 +4,7 @@ using PizzaApi.Domain.Users;
 namespace PizzaApi.Infrastructure.Persistence.Repositories
 {
     public class UsersRepository(PizzaDbContext context)
-        : Repository<User>(context), IUsersRepository
+        : Repository<User, Guid>(context), IUsersRepository
     {
     }
 }
