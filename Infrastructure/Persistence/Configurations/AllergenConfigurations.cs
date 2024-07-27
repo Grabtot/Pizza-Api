@@ -14,11 +14,11 @@ namespace PizzaApi.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Allergen> builder)
         {
-            builder.HasKey(allergen => allergen.NormalizedName);
+            builder.HasKey("_id");
+            builder.Property("_id").ValueGeneratedNever();
 
             builder.HasIndex(allergen => allergen.Name).IsUnique();
-
-            // builder.HasMany<Ingredient>();
+            builder.HasIndex(allergen => allergen.NormalizedName).IsUnique();
         }
     }
 }

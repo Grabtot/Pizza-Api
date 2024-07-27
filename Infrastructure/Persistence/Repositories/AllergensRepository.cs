@@ -7,9 +7,9 @@ namespace PizzaApi.Infrastructure.Persistence.Repositories
     public class AllergensRepository(PizzaDbContext context)
         : Repository<Allergen, string>(context), IAllergenRepository
     {
-        public override Task<Allergen?> FindAsync(string id)
+        public override async Task<Allergen?> FindAsync(string name)
         {
-            return base.FindAsync(id.ToUpper());
+            return await DbSet.FirstOrDefaultAsync(x => x.NormalizedName == name.ToUpper());
         }
 
         public async Task<List<Allergen>> GetAll(CancellationToken cancellationToken = default)
