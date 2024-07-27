@@ -70,9 +70,9 @@ namespace PizzaApi.Api.Common.Services
             string path = linkType switch
             {
                 LinkType.EmailConfirm => useClientUrisInEmails ? _clientAppOptions.ConfirmationPath :
-                                        "account/confirmEmail",
+                                        "api/account/confirmEmail",
                 LinkType.PasswordReset => useClientUrisInEmails ? _clientAppOptions.PasswordResetPath :
-                                        "account/resetPassword",
+                                        "api/account/resetPassword",
                 _ => throw new ArgumentException(),
             };
 
