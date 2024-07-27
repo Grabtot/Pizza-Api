@@ -6,6 +6,7 @@
         {
             // Policies
             public const string MangerOrDeveloper = "MangerOrDeveloper";
+            public const string MangerPolicy = "MangerPolicy";
 
             //Roles
             public const string Manager = "Manager";
