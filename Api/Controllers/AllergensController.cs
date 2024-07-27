@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Allergens;
 using PizzaApi.Application.Allergens.Commands.CreateAllergen;
+using PizzaApi.Application.Allergens.Commands.DeleteAllergen;
 using PizzaApi.Application.Allergens.Queries.GetAllAllergens;
 using PizzaApi.Application.Common.Constants;
 using PizzaApi.Domain.Ingredients.ValueObjects;
@@ -36,6 +37,14 @@ namespace PizzaApi.Api.Controllers
             return result.Match(
                 _ => CreatedAtAction(nameof(GetAll), null),
                 Problem);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string name)
+        {
+            ErrorOr<Success> result = await Mediator.Send(new DeleteAllergenCommand(name));
+
+            return result.Match(_ => NoContent(), Problem);
         }
     }
 }
