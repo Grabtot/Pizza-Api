@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Allergens;
 using PizzaApi.Application.Allergens.Commands.CreateAllergen;
 using PizzaApi.Application.Allergens.Commands.DeleteAllergen;
+using PizzaApi.Application.Allergens.Commands.UpdateAllergen;
 using PizzaApi.Application.Allergens.Queries.GetAllAllergens;
 using PizzaApi.Application.Common.Constants;
 using PizzaApi.Domain.Ingredients.ValueObjects;
@@ -37,6 +38,16 @@ namespace PizzaApi.Api.Controllers
             return result.Match(
                 _ => CreatedAtAction(nameof(GetAll), null),
                 Problem);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateAllergenRequest request)
+        {
+            UpdateAllergenCommand command = Mapper.Map<UpdateAllergenCommand>(request);
+
+            ErrorOr<Allergen> result = await Mediator.Send(command);
+
+            return result.Match(_ => NoContent(), Problem);
         }
 
         [HttpDelete]
