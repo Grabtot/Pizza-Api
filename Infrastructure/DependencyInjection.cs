@@ -102,6 +102,7 @@ namespace PizzaApi.Infrastructure
         {
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IAllergenRepository, AllergensRepository>();
+            services.AddScoped<ITagRepository, TagRepository>();
 
             return services;
         }
