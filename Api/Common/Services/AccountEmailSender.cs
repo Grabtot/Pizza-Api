@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using PizzaApi.Api.Common.Options;
-using PizzaApi.Api.Controllers;
 using PizzaApi.Application.Common.Interfaces;
 using PizzaApi.Domain.Users;
 using System.Text;

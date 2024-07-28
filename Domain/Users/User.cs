@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PizzaApi.Domain.Common.Interfaces;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PizzaApi.Domain.Users
 {

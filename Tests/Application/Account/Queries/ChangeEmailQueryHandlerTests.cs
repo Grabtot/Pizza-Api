@@ -1,9 +1,5 @@
 ﻿using ErrorOr;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using PizzaApi.Application.Common.Interfaces;
 using PizzaApi.Application.Users.Queries.ChangeEmail;

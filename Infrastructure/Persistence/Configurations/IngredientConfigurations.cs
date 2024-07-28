@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PizzaApi.Domain.Ingredients;
-using PizzaApi.Domain.Pizzas;
 
 namespace PizzaApi.Infrastructure.Persistence.Configurations
 {
