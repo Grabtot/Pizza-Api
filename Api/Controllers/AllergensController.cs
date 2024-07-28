@@ -18,6 +18,7 @@ namespace PizzaApi.Api.Controllers
     public class AllergensController(IMapper mapper, IMediator mediator) : ApiController(mapper, mediator)
     {
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             ErrorOr<List<Allergen>> result
