@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Tags;
 using PizzaApi.Application.Common.Constants;
 using PizzaApi.Application.Tags.Commands.CreateTag;
-using PizzaApi.Application.Tags.GetAllTags;
+using PizzaApi.Application.Tags.Queries.GetAllTags;
 using PizzaApi.Domain.Ingredients.ValueObjects;
 
 namespace PizzaApi.Api.Controllers

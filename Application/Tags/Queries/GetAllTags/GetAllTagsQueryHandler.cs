@@ -2,7 +2,7 @@
 using PizzaApi.Application.Common.Interfaces.Repositories;
 using PizzaApi.Domain.Ingredients.ValueObjects;
 
-namespace PizzaApi.Application.Tags.GetAllTags
+namespace PizzaApi.Application.Tags.Queries.GetAllTags
 {
     public class GetAllTagsQueryHandler(ITagRepository tagRepository)
         : IRequestHandler<GetAllTagsQuery, List<Tag>>
