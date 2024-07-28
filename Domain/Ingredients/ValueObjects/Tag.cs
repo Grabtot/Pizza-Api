@@ -6,6 +6,7 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
     public class Tag : IAuditableEntity
     {
         private string _name;
+        private Guid _id;
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -28,6 +29,7 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
 
         public Tag(string name, Color? color = null)
         {
+            _id = Guid.NewGuid();
             _name = name;
             NormalizedName = name.ToUpper();
             Color = color;
