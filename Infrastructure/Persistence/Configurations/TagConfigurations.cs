@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PizzaApi.Domain.Ingredients;
 using PizzaApi.Domain.Ingredients.ValueObjects;
 using System.Drawing;
 
@@ -10,11 +9,11 @@ namespace PizzaApi.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Tag> builder)
         {
-            builder.HasKey(tag => tag.NormalizedName);
+            builder.HasKey("_id");
+            builder.Property("_id").ValueGeneratedNever();
 
             builder.HasIndex(tag => tag.Name).IsUnique();
-
-            //builder.HasMany<Ingredient>();
+            builder.HasIndex(tag => tag.NormalizedName).IsUnique();
 
             builder.Property(tag => tag.Color)
                 .HasConversion(
