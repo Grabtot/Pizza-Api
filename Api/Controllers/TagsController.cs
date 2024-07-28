@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using PizzaApi.Api.Models.Tags;
 using PizzaApi.Application.Common.Constants;
 using PizzaApi.Application.Tags.Commands.CreateTag;
+using PizzaApi.Application.Tags.Commands.DeleteTag;
+using PizzaApi.Application.Tags.Commands.UpdateTag;
 using PizzaApi.Application.Tags.Queries.GetAllTags;
 using PizzaApi.Domain.Ingredients.ValueObjects;
 
@@ -33,6 +35,24 @@ namespace PizzaApi.Api.Controllers
             ErrorOr<Tag> result = await Mediator.Send(command);
 
             return result.Match(_ => CreatedAtAction(nameof(GetAll), null), Problem);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateTagRequest request)
+        {
+            UpdateTagCommand command = Mapper.Map<UpdateTagCommand>(request);
+
+            ErrorOr<Tag> result = await Mediator.Send(command);
+
+            return result.Match(_ => NoContent(), Problem);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string name)
+        {
+            ErrorOr<Success> result = await Mediator.Send(new DeleteTagCommand(name));
+
+            return result.Match(_ => NoContent(), Problem);
         }
     }
 }
