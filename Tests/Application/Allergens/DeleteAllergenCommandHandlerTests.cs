@@ -32,7 +32,7 @@ namespace PizzaApi.Tests.Application.Allergens
             // Assert
             Assert.False(result.IsError);
             Assert.Equal(Result.Success, result.Value);
-            _mockAllergenRepository.Verify(repo => repo.Delate(existingAllergen), Times.Once);
+            _mockAllergenRepository.Verify(repo => repo.Delete(existingAllergen), Times.Once);
         }
 
         [Theory]
@@ -49,7 +49,7 @@ namespace PizzaApi.Tests.Application.Allergens
             // Assert
             Assert.True(result.IsError);
             Assert.Contains(result.Errors, e => e.Code == Error.NotFound().Code);
-            _mockAllergenRepository.Verify(repo => repo.Delate(It.IsAny<Allergen>()), Times.Never);
+            _mockAllergenRepository.Verify(repo => repo.Delete(It.IsAny<Allergen>()), Times.Never);
         }
 
         public static IEnumerable<object[]> ValidDeleteAllergenCommands()

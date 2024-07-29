@@ -32,7 +32,7 @@ namespace PizzaApi.Tests.Application.Tags
             // Assert
             Assert.False(result.IsError);
             Assert.Equal(Result.Success, result.Value);
-            _mockTagRepository.Verify(repo => repo.Delate(existingTag), Times.Once);
+            _mockTagRepository.Verify(repo => repo.Delete(existingTag), Times.Once);
         }
 
         [Theory]
@@ -49,7 +49,7 @@ namespace PizzaApi.Tests.Application.Tags
             // Assert
             Assert.True(result.IsError);
             Assert.Contains(result.Errors, e => e.Code == Error.NotFound().Code);
-            _mockTagRepository.Verify(repo => repo.Delate(It.IsAny<Tag>()), Times.Never);
+            _mockTagRepository.Verify(repo => repo.Delete(It.IsAny<Tag>()), Times.Never);
         }
 
         public static IEnumerable<object[]> ValidDeleteTagCommands()

@@ -13,7 +13,7 @@ using PizzaApi.Application.Users.Commands.ChangeName;
 using PizzaApi.Application.Users.Commands.ChangePassword;
 using PizzaApi.Application.Users.Commands.ConfirmAccount;
 using PizzaApi.Application.Users.Commands.ConfirmNewEmail;
-using PizzaApi.Application.Users.Commands.DelateUser;
+using PizzaApi.Application.Users.Commands.DeleteUser;
 using PizzaApi.Application.Users.Commands.Login;
 using PizzaApi.Application.Users.Commands.RefreshToken;
 using PizzaApi.Application.Users.Commands.Register;
@@ -194,7 +194,7 @@ namespace PizzaApi.Api.Controllers
         [HttpDelete("deleteAccount")]
         public async Task<IActionResult> DeleteAccount()
         {
-            await Mediator.Send(new DelateUserCommand(_userProvider.UserId!.Value));
+            await Mediator.Send(new DeleteUserCommand(_userProvider.UserId!.Value));
 
             return NoContent();
         }

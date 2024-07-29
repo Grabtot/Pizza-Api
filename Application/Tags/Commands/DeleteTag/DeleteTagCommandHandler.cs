@@ -17,7 +17,7 @@ namespace PizzaApi.Application.Tags.Commands.DeleteTag
             if (tag == null)
                 return Error.NotFound(description: $"Tag {command.Name} not found");
 
-            _tagRepository.Delate(tag);
+            _tagRepository.Delete(tag);
 
             return Result.Success;
         }
