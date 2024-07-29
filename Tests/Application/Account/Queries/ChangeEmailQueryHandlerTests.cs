@@ -6,7 +6,7 @@ using PizzaApi.Application.Users.Queries.ChangeEmail;
 using PizzaApi.Domain.Users;
 using PizzaApi.Tests.Application.TestUtils.Constants;
 
-namespace Tests.Application.Users.Queries
+namespace PizzaApi.Tests.Application.Account.Queries
 {
     public class ChangeEmailQueryHandlerTests
     {
