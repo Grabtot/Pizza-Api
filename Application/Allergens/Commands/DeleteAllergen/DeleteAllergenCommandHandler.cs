@@ -17,7 +17,7 @@ namespace PizzaApi.Application.Allergens.Commands.DeleteAllergen
             if (allergen == null)
                 return Error.NotFound(description: $"Allergen {command.Name} not found");
 
-            _allergenRepository.Delate(allergen);
+            _allergenRepository.Delete(allergen);
 
             return Result.Success;
         }

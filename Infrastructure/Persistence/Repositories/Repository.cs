@@ -14,7 +14,7 @@ namespace PizzaApi.Infrastructure.Persistence.Repositories
             return entity;
         }
 
-        public virtual void Delate(TEntity entity)
+        public virtual void Delete(TEntity entity)
         {
             DbSet.Remove(entity);
         }
