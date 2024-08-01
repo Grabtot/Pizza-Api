@@ -12,7 +12,7 @@ namespace PizzaApi.Application.Allergens.Queries.GetAllAllergens
 
         public async Task<ErrorOr<List<Allergen>>> Handle(GetAllAllergensQuery query, CancellationToken cancellationToken)
         {
-            List<Allergen> allergens = await _allergenRepository.GetAll(cancellationToken);
+            List<Allergen> allergens = await _allergenRepository.GetAllAsync(cancellationToken);
 
             return allergens;
         }

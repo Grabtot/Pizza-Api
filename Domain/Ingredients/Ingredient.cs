@@ -8,16 +8,22 @@ namespace PizzaApi.Domain.Ingredients
         public Guid Id { get; init; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public required string Name { get; set; }
+        public string Name { get; set; }
         public List<Tag> Tags { get; set; }
         public List<Allergen> Allergens { get; set; }
         public double Price { get; set; }
 
-        public Ingredient()
+#pragma warning disable CS8618 
+        private Ingredient() { }
+#pragma warning restore CS8618
+
+        public Ingredient(string name, double price, List<Tag> tags, List<Allergen> allergens)
         {
             Id = Guid.NewGuid();
-            Tags = [];
-            Allergens = [];
+            Name = name;
+            Price = price;
+            Tags = tags;
+            Allergens = allergens;
         }
     }
 }

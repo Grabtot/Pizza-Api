@@ -8,7 +8,8 @@ namespace PizzaApi.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Ingredient> builder)
         {
-            // builder.HasMany<Pizza>();
+            builder.HasIndex(ing => ing.Name).IsUnique();
+
             builder.HasMany(ing => ing.Tags).WithMany();
             builder.HasMany(ing => ing.Allergens).WithMany();
         }

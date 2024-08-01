@@ -12,7 +12,7 @@ namespace PizzaApi.Infrastructure.Persistence.Repositories
             return await DbSet.FirstOrDefaultAsync(x => x.NormalizedName == name.ToUpper());
         }
 
-        public async Task<List<Allergen>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<List<Allergen>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await DbSet.ToListAsync(cancellationToken);
         }
