@@ -11,6 +11,7 @@ namespace PizzaApi.Infrastructure.Persistence.Configurations
             builder.HasIndex(ing => ing.Name).IsUnique();
 
             builder.HasMany(ing => ing.Tags).WithMany();
+
             builder.HasMany(ing => ing.Allergens).WithMany();
         }
     }
