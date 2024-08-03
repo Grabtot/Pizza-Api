@@ -6,7 +6,7 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
     public class Tag : IAuditableEntity
     {
         private string _name;
-        public Guid Id { get; private set; }
+        private Guid _id;
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -29,7 +29,7 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
 
         public Tag(string name, Color? color = null)
         {
-            Id = Guid.NewGuid();
+            _id = Guid.NewGuid();
             _name = name;
             NormalizedName = name.ToUpper();
             Color = color;
@@ -49,5 +49,9 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
 
         public static bool operator !=(Tag? x, Tag? y) => !(x == y);
 
+        public override string ToString()
+        {
+            return $"{Name}, {_id}";
+        }
     }
 }

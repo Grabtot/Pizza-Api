@@ -5,7 +5,7 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
     public class Allergen : IAuditableEntity
     {
         private string _name;
-        public Guid Id { get; private set; }
+        private Guid _id;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string Name
@@ -25,7 +25,7 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
 
         public Allergen(string name, string? description = null)
         {
-            Id = Guid.NewGuid();
+            _id = Guid.NewGuid();
             _name = name;
             NormalizedName = name.ToUpper();
             Description = description;
@@ -44,5 +44,10 @@ namespace PizzaApi.Domain.Ingredients.ValueObjects
             && x?.Description == y?.Description;
 
         public static bool operator !=(Allergen? x, Allergen? y) => !(x == y);
+
+        public override string ToString()
+        {
+            return $"{Name}, {_id}";
+        }
     }
 }

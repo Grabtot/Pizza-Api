@@ -11,13 +11,13 @@ namespace PizzaApi.Domain.Ingredients
         public string Name { get; set; }
         public List<Tag> Tags { get; set; }
         public List<Allergen> Allergens { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
 #pragma warning disable CS8618 
         private Ingredient() { }
 #pragma warning restore CS8618
 
-        public Ingredient(string name, double price, List<Tag> tags, List<Allergen> allergens)
+        public Ingredient(string name, decimal price, List<Tag> tags, List<Allergen> allergens)
         {
             Id = Guid.NewGuid();
             Name = name;

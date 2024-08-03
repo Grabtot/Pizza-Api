@@ -25,17 +25,17 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AllergenIngredient", b =>
                 {
-                    b.Property<Guid>("AllergensId")
+                    b.Property<Guid>("Allergens_id")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("IngredientId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("AllergensId", "IngredientId");
+                    b.HasKey("Allergens_id", "IngredientId");
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("AllergenIngredient");
+                    b.ToTable("AllergenIngredient", (string)null);
                 });
 
             modelBuilder.Entity("IngredientTag", b =>
@@ -43,14 +43,14 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("IngredientId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("TagsId")
+                    b.Property<Guid>("Tags_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("IngredientId", "TagsId");
+                    b.HasKey("IngredientId", "Tags_id");
 
-                    b.HasIndex("TagsId");
+                    b.HasIndex("Tags_id");
 
-                    b.ToTable("IngredientTag");
+                    b.ToTable("IngredientTag", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -196,8 +196,8 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -207,12 +207,12 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("PizzaApi.Domain.Ingredients.ValueObjects.Allergen", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("_id")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -232,7 +232,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.HasKey("_id");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -240,12 +240,12 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                     b.HasIndex("NormalizedName")
                         .IsUnique();
 
-                    b.ToTable("Allergens");
+                    b.ToTable("Allergens", (string)null);
                 });
 
             modelBuilder.Entity("PizzaApi.Domain.Ingredients.ValueObjects.Tag", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("_id")
                         .HasColumnType("uuid");
 
                     b.Property<int?>("Color")
@@ -265,7 +265,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.HasKey("_id");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -273,7 +273,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                     b.HasIndex("NormalizedName")
                         .IsUnique();
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("PizzaApi.Domain.Pizzas.Pizza", b =>
@@ -301,7 +301,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pizzas");
+                    b.ToTable("Pizzas", (string)null);
                 });
 
             modelBuilder.Entity("PizzaApi.Domain.Users.User", b =>
@@ -382,7 +382,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("PizzaApi.Domain.Ingredients.ValueObjects.Allergen", null)
                         .WithMany()
-                        .HasForeignKey("AllergensId")
+                        .HasForeignKey("Allergens_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -403,7 +403,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
 
                     b.HasOne("PizzaApi.Domain.Ingredients.ValueObjects.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagsId")
+                        .HasForeignKey("Tags_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -9,7 +9,8 @@ namespace PizzaApi.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Tag> builder)
         {
-            builder.Property(tag => tag.Id).ValueGeneratedNever();
+            builder.HasKey("_id");
+            builder.Property("_id").ValueGeneratedNever();
 
             builder.HasIndex(tag => tag.Name).IsUnique();
             builder.HasIndex(tag => tag.NormalizedName).IsUnique();

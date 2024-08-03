@@ -13,8 +13,8 @@ using PizzaApi.Infrastructure.Persistence;
 namespace PizzaApi.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(PizzaDbContext))]
-    [Migration("20240803163337_AllergenAndTagId")]
-    partial class AllergenAndTagId
+    [Migration("20240801123216_IngredientPriceDecimal")]
+    partial class IngredientPriceDecimal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,13 +28,13 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AllergenIngredient", b =>
                 {
-                    b.Property<Guid>("AllergensId")
+                    b.Property<Guid>("Allergens_id")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("IngredientId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("AllergensId", "IngredientId");
+                    b.HasKey("Allergens_id", "IngredientId");
 
                     b.HasIndex("IngredientId");
 
@@ -46,12 +46,12 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("IngredientId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("TagsId")
+                    b.Property<Guid>("Tags_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("IngredientId", "TagsId");
+                    b.HasKey("IngredientId", "Tags_id");
 
-                    b.HasIndex("TagsId");
+                    b.HasIndex("Tags_id");
 
                     b.ToTable("IngredientTag");
                 });
@@ -199,8 +199,8 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -215,7 +215,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("PizzaApi.Domain.Ingredients.ValueObjects.Allergen", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("_id")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -235,7 +235,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.HasKey("_id");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -248,7 +248,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("PizzaApi.Domain.Ingredients.ValueObjects.Tag", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("_id")
                         .HasColumnType("uuid");
 
                     b.Property<int?>("Color")
@@ -268,7 +268,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.HasKey("_id");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -385,7 +385,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("PizzaApi.Domain.Ingredients.ValueObjects.Allergen", null)
                         .WithMany()
-                        .HasForeignKey("AllergensId")
+                        .HasForeignKey("Allergens_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -406,7 +406,7 @@ namespace PizzaApi.Infrastructure.Persistence.Migrations
 
                     b.HasOne("PizzaApi.Domain.Ingredients.ValueObjects.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagsId")
+                        .HasForeignKey("Tags_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

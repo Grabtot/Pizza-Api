@@ -9,7 +9,18 @@ namespace PizzaApi.Infrastructure.Persistence.Repositories
     {
         public async Task<Ingredient?> FindByNameAsync(string name)
         {
-            return await DbSet.SingleOrDefaultAsync(x => x.Name == name);
+            return await DbSet
+                .Include(ingredient => ingredient.Tags)
+                .Include(ingredient => ingredient.Allergens)
+                .SingleOrDefaultAsync(x => x.Name == name);
+        }
+
+        public override Task<Ingredient?> FindAsync(Guid id)
+        {
+            return DbSet
+                .Include(ingredient => ingredient.Tags)
+                .Include(ingredient => ingredient.Allergens)
+                .FirstOrDefaultAsync(ingredient => ingredient.Id == id);
         }
     }
 }
